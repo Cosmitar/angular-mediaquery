@@ -1,0 +1,121 @@
+<!DOCTYPE html />
+<html lang="en" ng-app="example">
+	<head>
+		<title>Angular responsive - gallery items example</title>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
+		<script type="text/javascript" src="../build/angularresponsive.min.js"></script>
+		<script type="text/javascript">
+			angular.module( 'example', [ 'ui.bootstrap', 'angularResponsive' ] )
+			.controller( 'exampleController', [
+				'$scope'
+				,'ResponsiveManager'
+				,function( $scope, ResponsiveManager ){
+					$scope.slidesForGallery = [];
+
+					//populate elements
+					$galleryElements = [];
+					for( var i = 1; i <= 8; i++ ){
+						$galleryElements.push({
+							src: 'http://preview.simonswiss.com/booomodx/assets/theme/booom/images/img-' + i + '.png'
+						});
+					}
+					
+					function buildGallery( itemsBySlide ){
+						var i, j, start, stop, slide, gallerySlides = [];
+						for( i = 0; i < Math.ceil( $galleryElements.length / itemsBySlide ); i++ ){
+							slide = {
+								active: i == 0,
+								thumbs: []
+							};
+							start = i * itemsBySlide;
+							stop = start + itemsBySlide;
+							for( j = start; j < stop; j++ ){
+								if( $galleryElements[ j ] ){
+									slide.thumbs.push( $galleryElements[ j ] );	
+								}
+							}
+							gallerySlides.push( slide );
+						}
+						$scope.slidesForGallery = gallerySlides;
+					}
+
+
+					/*ResponsiveManager
+						.query({ minWidth: 1335 })
+							.callback( function whenTrue( res ){
+								buildGallery( 4 );
+							})
+						.query({ minWidth: 1005, maxWidth: 1335 })
+							.callback( function whenTrue( res ){
+								buildGallery( 3 );
+							})
+						.query({ minWidth: 675, maxWidth: 1005 })
+							.callback( function whenTrue( res ){
+								buildGallery( 2 );
+							}, function whenFalse( res ){
+								if( res.isBellowMinWidth() ){
+									buildGallery( 1 );
+								}
+						});*/
+
+					ResponsiveManager
+						.query(
+							{ minWidth: 1335 },
+							function whenTrue( res ){
+								buildGallery( 4 );
+							}
+						)
+						.query(
+							{ minWidth: 1005, maxWidth: 1335 },
+							function whenTrue( res ){
+								buildGallery( 3 );
+							})
+						.query(
+							{ minWidth: 675, maxWidth: 1005 },
+							function whenTrue( res ){
+								buildGallery( 2 );
+							},
+							function whenFalse( res ){
+								if( res.isBellowMinWidth() ){
+									buildGallery( 1 );
+								}
+							});
+			}]);
+		</script>
+		<style type="text/css">
+			.carousel a.carousel-control {
+				height: 360px;
+			}
+			.carousel ul {
+				width: 100%;
+				overflow: hidden;
+				font-size: 0;
+				height: 360px;
+				padding: 0;
+				padding-top: 30px;
+				background-color: #333;
+			}
+			.carousel ul li {
+				width: 300px;
+				height: 300px;
+				display: inline-block;
+				margin: 0 15px;
+			}
+		</style>
+	</head>
+	<body data-ng-controller="exampleController" data-responsive-listener>
+		<h1>Gallery items example</h1>
+		<span>resize window to threshold. 675px - 1005px - 1335px</span>
+		<carousel>
+			<slide data-ng-repeat="slide in slidesForGallery track by $index" data-active="slide.active" >
+				<ul>
+					<li	data-ng-repeat="thumb in slide.thumbs track by $index">
+						<img data-ng-src="{{thumb.src}}" width="300" height="300" />
+					</li>
+				</ul>
+			</slide>
+		</carousel>
+	</body>
+</html>

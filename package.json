@@ -1,0 +1,9 @@
+{
+  "name": "angularResponsive",
+  "author": "www.afterseven.com.ar",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-contrib-uglify": "~0.5.1"
+  }
+}
