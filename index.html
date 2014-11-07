@@ -41,25 +41,6 @@
 						$scope.slidesForGallery = gallerySlides;
 					}
 
-
-					/*ResponsiveManager
-						.query({ minWidth: 1335 })
-							.callback( function whenTrue( res ){
-								buildGallery( 4 );
-							})
-						.query({ minWidth: 1005, maxWidth: 1335 })
-							.callback( function whenTrue( res ){
-								buildGallery( 3 );
-							})
-						.query({ minWidth: 675, maxWidth: 1005 })
-							.callback( function whenTrue( res ){
-								buildGallery( 2 );
-							}, function whenFalse( res ){
-								if( res.isBellowMinWidth() ){
-									buildGallery( 1 );
-								}
-						});*/
-
 					ResponsiveManager
 						.query(
 							{ minWidth: 1335 },
@@ -107,7 +88,7 @@
 	</head>
 	<body data-ng-controller="exampleController" data-responsive-listener>
 		<h1>Gallery items example</h1>
-		<span>resize window to threshold. 675px - 1005px - 1335px</span>
+		<span>Resize this window to the following thresholds. 675px - 1005px - 1335px</span>
 		<carousel>
 			<slide data-ng-repeat="slide in slidesForGallery track by $index" data-active="slide.active" >
 				<ul>
